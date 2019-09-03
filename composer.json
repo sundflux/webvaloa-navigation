@@ -1,0 +1,22 @@
+{
+    "name": "sundflux/webvaloa-navigation",
+    "description": "Webvaloa navigation, part of Webaloa platform",
+    "keywords": ["webvaloa"],
+    "homepage": "http://github.com/sundflux/webvaloa-navigation",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Tarmo Alexander Sundstrom",
+            "email": "ta@sundstrom.io",
+            "homepage": "http://www.webvaloa.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.2.19",
+        "phpmailer/phpmailer": "^5.2"
+    },
+    "autoload": {
+        "psr-4": {"Webvaloa\\": "src/Webvaloa"}
+    }
+}
