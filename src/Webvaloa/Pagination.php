@@ -5,7 +5,7 @@
  * Tarmo Alexander Sundström <ta@sundstrom.io>.
  *
  * Portions created by the Initial Developer are
- * Copyright (C) 2011 Tarmo Alexander Sundström <ta@sundstrom.io>
+ * Copyright (C) 2011,2019 Tarmo Alexander Sundström <ta@sundstrom.io>
  *
  * All Rights Reserved.
  *
@@ -30,7 +30,7 @@
  * IN THE SOFTWARE.
  */
 
-namespace Webvaloa\Helpers;
+namespace Webvaloa;
 
 use Libvaloa\Db;
 use PDO;
@@ -42,9 +42,103 @@ use stdClass;
 class Pagination
 {
     /**
+     * @var int
+     */
+    private $page;
+
+    /**
      * @var
      */
     private $pages;
+
+    /**
+     * @var int
+     */
+    private $total;
+
+    /**
+     * @var int
+     */
+    private $limit;
+
+    /**
+     * @var int
+     */
+    private $last;
+
+    /**
+     * Pagination constructor.
+     */
+    public function __construct()
+    {
+        $this->page = 1;
+        $this->total = -1;
+        $this->limit = 100;
+        $this->last = 1;
+    }
+
+    /**
+     * @param int $i
+     * @return int
+     */
+    public function setPage(int $i):int
+    {
+        $this->page = (int) $i;
+        return $this->page;
+    }
+
+    /**
+     * @param int $i
+     * @return int
+     */
+    public function setTotal(int $i):int
+    {
+        $this->total = (int) $i;
+        return $this->total;
+    }
+
+    /**
+     * @param int $i
+     * @return int
+     */
+    public function setLimit(int $i):int
+    {
+        $this->limit = (int) $i;
+        return $this->limit;
+    }
+
+    /**
+     * @return int
+     */
+    public function getPage():int
+    {
+        return $this->page;
+    }
+
+    /**
+     * @return int
+     */
+    public function getTotal():int
+    {
+        return $this->total;
+    }
+
+    /**
+     * @return int
+     */
+    public function getLimit():int
+    {
+        return $this->limit;
+    }
+
+    public function getLast():int
+    {
+        return $this->last;
+    }
+
+    public function getObject() : stdClass {
+        return $this->pages($this->getPage(), $this->getTotal(), $this->getLimit());
+    }
 
     /**
      * Get pagination.
@@ -91,6 +185,8 @@ class Pagination
         }
 
         if ($this->pages->page == $this->pages->pages) {
+            $this->getLast($this->pages->pages);
+
             $this->pages->last = true;
         }
 
