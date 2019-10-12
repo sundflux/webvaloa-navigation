@@ -30,9 +30,10 @@
  * IN THE SOFTWARE.
  */
 
-namespace Webvaloa\Helpers;
+namespace Webvaloa;
 
 use stdClass;
+use Exception;
 
 /**
  * Class Navigation.

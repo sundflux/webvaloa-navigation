@@ -35,6 +35,7 @@ namespace Webvaloa;
 use Libvaloa\Db;
 use PDO;
 use stdClass;
+use Exception;
 
 /**
  * Class Pagination.
@@ -137,7 +138,7 @@ class Pagination
     }
 
     public function getObject() : stdClass {
-        return $this->pages($this->getPage(), $this->getTotal(), $this->getLimit());
+        return $this->pages($this->getTotal(), $this->getPage(), $this->getLimit());
     }
 
     /**
@@ -184,9 +185,7 @@ class Pagination
             $this->pages->pageNext = $page + 1;
         }
 
-        if ($this->pages->page == $this->pages->pages) {
-            $this->getLast($this->pages->pages);
-
+        if ($this->pages->page == $this->getLast()) {
             $this->pages->last = true;
         }
 
@@ -208,14 +207,20 @@ class Pagination
      */
     public function prepare($query)
     {
-        return $query.' LIMIT '.(int) $this->pages->limit.' OFFSET '.(int) $this->pages->offset;
+        $offset = 0;
+
+        if ($this->getPage() > 0) {
+            $offset = (int) ($this->getPage() * $this->getLimit()) - $this->getLimit();
+        }
+
+        return $query.' LIMIT '.(int) $this->pages->limit.' OFFSET '.(int) $offset;
     }
 
     /**
      * @param $table
      * @param string $where
-     *
      * @return int
+     * @throws Db\DBException
      */
     public function countTable($table, $where = '')
     {
